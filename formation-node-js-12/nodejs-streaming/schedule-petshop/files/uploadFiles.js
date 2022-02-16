@@ -1,7 +1,7 @@
 const fs = require('fs');
 
-fs.readFile('../assets/dachshund.jpeg', (error, buffer) => {
-    fs.writeFile('../assets/dachshund2.jpeg', buffer, (error) => {
-        console.log('Image created!');
+fs.createReadStream('../assets/dachshund.jpeg')
+    .pipe(fs.createWriteStream('../assets/dachshund-test-stream.jpeg'))
+    .on('finish', () => {
+        console.log('Image created');
     })
-})

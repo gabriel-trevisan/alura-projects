@@ -1,5 +1,5 @@
-const connection = require('../infrastructure/connection');
-const uploadFiles = require('../files/uploadFiles');
+const connection = require('../infrastructure/database/connection');
+const uploadFiles = require('../infrastructure/files/uploadFiles');
 class Pet{
     add(pet, response){
         const sql = "insert into pets set ?"

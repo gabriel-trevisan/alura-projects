@@ -1,6 +1,6 @@
 const moment = require('moment');
 
-const connection = require('../infrastructure/connection');
+const connection = require('../infrastructure/database/connection');
 
 class Service {
     list(response){

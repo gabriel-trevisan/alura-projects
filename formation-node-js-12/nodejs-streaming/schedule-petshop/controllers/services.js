@@ -12,9 +12,11 @@ module.exports = app => {
     });
 
     app.post('/services', (request, response) => {
-        const services = request.body;
+        const service = request.body;
         
-        Service.add(services, response);
+        Service.add(service).then((serviceAdded) => {
+            response.status(201).json(serviceAdded);
+        }).catch((error) => response.status(400).json(error));
     });
     
     app.patch('/services/:id', (request, response) => {

@@ -1,6 +1,7 @@
 const moment = require('moment');
 
 const connection = require('../infrastructure/database/connection');
+const serviceRepository = require('../repositories/service');
 
 class Service {
     list(response){
@@ -26,47 +27,42 @@ class Service {
             }
         });
     }
-    add(services, response){
+    add(service){
         const creationDate = moment().format("YYYY-MM-DD");
-        const date = moment(services.date, 'DD/MM/YYYY').format("YYYY-MM-DD");
+        const date = moment(service.date, 'DD/MM/YYYY').format("YYYY-MM-DD");
 
         const isValidDate = moment(date).isSameOrAfter(creationDate);
 
-        const isValidaNameCustomer = services.customer.length >= 5;
+        const isValidaNameCustomer = service.customer.length >= 5;
 
         const validations = [
             {
-                "campo": "date",
-                "validacao": isValidDate,
-                "mensagem": "The date must be greater than the current date."
+                "field": "date",
+                "validation": isValidDate,
+                "message": "The date must be greater than the current date."
             },
             {
-                "campo": "nome",
-                "validacao": isValidaNameCustomer,
-                "mensagem": "The name must be greater than or equal to 5 characters."
+                "field": "nome",
+                "validation": isValidaNameCustomer,
+                "message": "The name must be greater than or equal to 5 characters."
             }
         ];
 
-        console.log(validations);
-
-        const errorsFinded = validations.filter(campo => !campo.validacao);
+        const errorsFinded = validations.filter(field => !field.validation);
 
         const existErros = errorsFinded.length > 0
 
         if(existErros){
-            response.status(400).json(errorsFinded);
+            return new Promise((resolve, reject) => reject(errorsFinded));
         } else {
 
-            const servicesWithDates = {...services, creationDate, date};
+            const serviceWithDates = {...service, creationDate, date};
 
-            const sql = "insert into services set ?"
-
-            connection.query(sql, servicesWithDates, (error, result) => {
-                if(error){
-                    response.status(400).json(error);
-                } else {
-                    response.status(201).json(services);
-                }
+            return serviceRepository.add(serviceWithDates).then((result) => {
+                const id = result.insertId;
+                return new Promise((resolve) => {
+                    resolve({ ...service, id})
+                });
             });
         }
     }

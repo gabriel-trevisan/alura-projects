@@ -4,6 +4,31 @@ const connection = require('../infrastructure/database/connection');
 const serviceRepository = require('../repositories/service');
 
 class Service {
+    constructor(){
+        this.isValidDate = ({date, creationDate}) => moment(date).isSameOrAfter(creationDate);
+
+        this.isValidaNameCustomer = ({size}) => size >= 5;
+
+        this.validate = parameters => 
+            this.validations.filter(field => {
+                const {name} = field;
+                const parameter = parameters[name]
+                return !field.validation(parameter)
+            });
+
+        this.validations = [
+            {
+                "name": "date",
+                "validation": this.isValidDate,
+                "message": "The date must be greater than the current date."
+            },
+            {
+                "name": "customer",
+                "validation": this.isValidaNameCustomer,
+                "message": "The name must be greater than or equal to 5 characters."
+            }
+        ];
+    }
     list(response){
         const sql = "select * from services"
 
@@ -31,24 +56,12 @@ class Service {
         const creationDate = moment().format("YYYY-MM-DD");
         const date = moment(service.date, 'DD/MM/YYYY').format("YYYY-MM-DD");
 
-        const isValidDate = moment(date).isSameOrAfter(creationDate);
+        const parameters = {
+            date: {date, creationDate},
+            customer: {size: service.customer.length}
+        }
 
-        const isValidaNameCustomer = service.customer.length >= 5;
-
-        const validations = [
-            {
-                "field": "date",
-                "validation": isValidDate,
-                "message": "The date must be greater than the current date."
-            },
-            {
-                "field": "nome",
-                "validation": isValidaNameCustomer,
-                "message": "The name must be greater than or equal to 5 characters."
-            }
-        ];
-
-        const errorsFinded = validations.filter(field => !field.validation);
+        const errorsFinded = this.validate(parameters);
 
         const existErros = errorsFinded.length > 0
 

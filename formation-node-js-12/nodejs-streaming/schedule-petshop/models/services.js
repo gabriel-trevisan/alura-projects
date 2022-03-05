@@ -67,15 +67,7 @@ class Service {
             values.date = moment(values.date, 'DD/MM/YYYY').format('YYYY-MM-DD')
         }
 
-        const sql = "update services set ? where id = ?";
-        
-        connection.query(sql, [values, id], (error, result) => {
-            if(error){
-                response.status(400).json(error);
-            } else {
-                response.status(200).json({...values, id});
-            }
-        })
+        return serviceRepository.update(values, id);
     }
     delete(id, response){
         const sql = "delete from services where id = ?";

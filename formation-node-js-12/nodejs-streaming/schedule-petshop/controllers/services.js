@@ -27,9 +27,11 @@ module.exports = app => {
     
     app.patch('/services/:id', (request, response) => {
         const id = parseInt(request.params.id);
-        const valores = request.body;
+        const values = request.body;
 
-        Service.update(id, valores, response);
+        Service.update(id, values).then(service => {
+            response.json(service);
+        }).catch(error => response.status(400).json(error));
     })
 
     app.delete('/services/:id', (request, response) => {

@@ -16,6 +16,11 @@ class Service {
 
         return query(sql, id);
     }
+    update(values, id){
+        const sql = "update services set ? where id = ?";
+
+        return query(sql, [values, id]);
+    }
 }
 
 module.exports = new Service();

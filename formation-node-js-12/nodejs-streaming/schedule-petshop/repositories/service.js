@@ -6,6 +6,12 @@ class Service {
 
         return query(sql, service);
     }
+
+    list(){
+        const sql = "select * from services";
+
+        return query(sql);
+    }
 }
 
 module.exports = new Service();

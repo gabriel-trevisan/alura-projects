@@ -29,16 +29,8 @@ class Service {
             }
         ];
     }
-    list(response){
-        const sql = "select * from services"
-
-        connection.query(sql, (error, result) => {
-            if(error){
-                response.status(400).json(error);
-            } else {
-                response.status(200).json(result);
-            }
-        })
+    list(){
+        return serviceRepository.list();
     }
     findById(id, response){
         const sql = "select * from services where id = ?"

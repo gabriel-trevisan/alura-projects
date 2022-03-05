@@ -2,7 +2,11 @@ const Service = require('../models/services');
 
 module.exports = app => {
     app.get('/services', (request, response) => {
-        Service.list(response);
+        Service.list().then(services => {
+            response.json(services);
+        }).catch(error => {
+            response.status(400).json(error);
+        });
     })
 
     app.get('/services/:id', (request, response) => {

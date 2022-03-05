@@ -21,6 +21,11 @@ class Service {
 
         return query(sql, [values, id]);
     }
+    delete(id){
+        const sql = "delete from services where id = ?";
+
+        return query(sql, id);
+    }
 }
 
 module.exports = new Service();

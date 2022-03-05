@@ -37,6 +37,8 @@ module.exports = app => {
     app.delete('/services/:id', (request, response) => {
         const id = parseInt(request.params.id);
 
-        Service.delete(id, response);
+        Service.delete(id).then(service => {
+            response.json(service);
+        }).catch(error => response.status(400).json(error));
     })
 }

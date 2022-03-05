@@ -69,16 +69,8 @@ class Service {
 
         return serviceRepository.update(values, id);
     }
-    delete(id, response){
-        const sql = "delete from services where id = ?";
-
-        connection.query(sql, id, (error, result) => {
-            if(error){
-                response.status(400).json(error);
-            } else {
-                response.status(200).json({id});
-            }
-        })
+    delete(id){
+        return serviceRepository.delete(id);
     }
 }
 

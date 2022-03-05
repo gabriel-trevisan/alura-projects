@@ -12,7 +12,9 @@ module.exports = app => {
     app.get('/services/:id', (request, response) => {
         const id = parseInt(request.params.id);
 
-        Service.findById(id, response);
+        Service.findById(id).then(service => {
+            response.json(service);
+        }).catch(error => response.status(400).json(error));
     });
 
     app.post('/services', (request, response) => {

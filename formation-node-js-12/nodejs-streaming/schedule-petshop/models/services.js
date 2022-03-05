@@ -32,17 +32,8 @@ class Service {
     list(){
         return serviceRepository.list();
     }
-    findById(id, response){
-        const sql = "select * from services where id = ?"
-
-        connection.query(sql, id, (error, result) => {
-            const services = result[0];
-            if(error){
-                response.status(400).json(error);
-            } else {
-                response.status(200).json(services);
-            }
-        });
+    findById(id){
+        return serviceRepository.findById(id);
     }
     add(service){
         const creationDate = moment().format("YYYY-MM-DD");
@@ -71,12 +62,13 @@ class Service {
             });
         }
     }
-    update(id, values, response){
+    update(id, values){
         if(values.date){
             values.date = moment(values.date, 'DD/MM/YYYY').format('YYYY-MM-DD')
         }
 
         const sql = "update services set ? where id = ?";
+        
         connection.query(sql, [values, id], (error, result) => {
             if(error){
                 response.status(400).json(error);

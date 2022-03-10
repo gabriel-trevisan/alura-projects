@@ -5,12 +5,14 @@ function handleError(error) {
     throw new Error(chalk.red(error, 'Path invalid!'));
 }
 
-function readFile(path) {
-    const encoding = 'utf-8'
-    fs.promises
-        .readFile(path, encoding)
-            .then(text => console.log(chalk.green(text)))
-            .catch(erro => handleError(erro))
+async function readFile(path) {
+    try {
+        const encoding = 'utf-8'
+        const text = await fs.promises.readFile(path, encoding)
+        console.log(chalk.green(text))
+    } catch(error){
+        handleError(erro)
+    }
 }
 
 readFile('./files/text.md');

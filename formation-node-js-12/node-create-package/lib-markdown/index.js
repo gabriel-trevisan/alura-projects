@@ -9,10 +9,16 @@ async function readFile(path) {
     try {
         const encoding = 'utf-8'
         const text = await fs.promises.readFile(path, encoding)
-        console.log(chalk.green(text))
+        console.log(chalk.green(getLinks(text)))
     } catch(error){
         handleError(erro)
     }
+}
+
+function getLinks(text){
+    const regex = /\[([^\]]*)\]\((https?:\/\/[^$#\s].[^\s]*)\)/gm;
+    const links = text.match(regex);
+    return links;
 }
 
 readFile('./files/text.md');

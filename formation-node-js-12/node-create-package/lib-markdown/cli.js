@@ -1,5 +1,11 @@
-const readFile = require('./index');
+const chalk = require('chalk')
+const readFile = require('./index')
 
 const path = process.argv;
 
-console.log(readFile(path[2]));
+async function processText(path){
+    const result = await readFile(path[2]);
+    console.log(chalk.yellow('Links:'), result);
+}
+
+processText(path);

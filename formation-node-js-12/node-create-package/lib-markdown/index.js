@@ -26,4 +26,4 @@ function getLinks(text){
     return arrayLinks;
 }
 
-readFile('./files/text.md');
+module.exports = readFile;
